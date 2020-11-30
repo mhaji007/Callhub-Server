@@ -3,7 +3,6 @@ const twilio = require("twilio");
 require("dotenv").config();
 
 class Callhub {
-  
   phoneNumber = process.env.PHONE_NUMBER;
   phoneNumberSid = process.env.PHONE_NUMBER_SID;
   tokenSid = process.env.TOKEN_SID;
@@ -19,15 +18,28 @@ class Callhub {
     });
   }
   getTwilio() {
-    this.client
+    this.client;
   }
-
+  // Function for sending verification code sms
   async sendVerify(to, channel) {
-    const data = await this.client.verify.services(this.serviceId).verifications.create({
-      to,
-      channel
-    });
-    console.log('sendVerify', data)
+    const data = await this.client.verify
+      .services(this.serviceId)
+      .verifications.create({
+        to,
+        channel,
+      });
+    console.log("sendVerify", data);
+    return data;
+  }
+  // Function for verifying the verification code
+  async verifyCode(to, code) {
+    const data = await this.client.verify
+      .services(this.serviceId)
+      .verificationChecks.create({
+        to,
+        code,
+      });
+    console.log("verifyCode", data);
     return data;
   }
 }
