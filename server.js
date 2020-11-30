@@ -1,16 +1,18 @@
 const express = require("express");
 const callhub = require("./Callhub");
+require("dotenv").config();
 
 const app = express();
-const client = callhub.client;
 
-require("dotenv").config();
 
 app.get("/test", (req, res) => {
   res.send("Welcome to Callhub");
 });
-app.get("/login", (req, res) => {
+app.get("/login", async (req, res) => {
   console.log("Logging in... ");
+  // Send verification code to MOBILE number
+  const data = await callhub.sendVerify(process.env.MOBILE, "sms");
+  res.send(data);
 });
 app.get("/verify", (req, res) => {
   console.log("Verifying code...");
