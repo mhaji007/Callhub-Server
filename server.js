@@ -3,12 +3,12 @@ const callhub = require("./Callhub");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require("http");
+require("dotenv").config();
 // Use socket io for emitting event
 // from client to server without
 // having to post and wait on them
 const socketIo = require("socket.io");
 
-require("dotenv").config();
 
 const app = express();
 // Server
@@ -18,8 +18,12 @@ const socket = socketIo(server);
 
 // Subscribe to events on socket
 socket.on("connection", (socket) => {
-  console.log("Socket connected", socket);
+  console.log("Socket connected", socket.id);
 });
+
+socket.on('disconnect', () => {
+  console.log('Socket disconnected');
+})
 
 // Middlewares
 app.use(bodyParser.json());
