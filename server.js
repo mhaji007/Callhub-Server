@@ -40,22 +40,25 @@ app.use(cors());
 // });
 
 // Endpoint for sending verification code
-// (retruns an object containing verification code)
+// (returns an object containing verification code)
 app.post("/login", async (req, res) => {
-  console.log("Logging in... ");
   const { to, username, channel } = req.body;
   // Send verification code to MOBILE number
   const data = await callhub.sendVerify(to, channel);
-  res.send(data);
+  res.send('Sent Code');
 });
 // Endpoint for verifying the verification code sent
 // back from the frontend
-// (returns an object containing verification code's valid status)
+// If code is approved, create jwt for the user
+// if not send back invalid token message
 app.post("/verify", async (req, res) => {
-  const { to, code } = req.body;
-  console.log("Verifying code...");
+  const { to, code, username } = req.body;
   const data = await callhub.verifyCode(to, code);
-  res.send(data);
+    if(data.status === 'approved') {
+      const token = jwt.createJwt(username);
+      return res.send({token})
+    }
+  res.status(401).send('Invalid token');
 });
 
 const port = process.env.PORT || 3002;

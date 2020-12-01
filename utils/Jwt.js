@@ -1,7 +1,7 @@
 // Responsible for creating a token
 // after user is verified by Callhub
 // we want to create a token for the user
-// so they can make request with it
+// so browser can make request and emit event with it
 // used in App.
 // When user has signed up with Callhub,
 // we create jwt and
