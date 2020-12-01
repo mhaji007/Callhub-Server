@@ -9,21 +9,26 @@ require("dotenv").config();
 // having to post and wait on them
 const socketIo = require("socket.io");
 
-
 const app = express();
 // Server
 const server = http.createServer(app);
-// Scoket
-const socket = socketIo(server);
+// Socket
+const io = socketIo(server);
 
 // Subscribe to events on socket
-socket.on("connection", (socket) => {
+// socket below is an individual connection
+// that we get back when connection is established
+// this socket is our direct connection to unique
+// page in browser. Each page has its own unique
+// socket
+io.on("connection", (socket) => {
+  // When specific page is connected
   console.log("Socket connected", socket.id);
+  // On disconnet from any page
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected", socket.id);
+  });
 });
-
-socket.on('disconnect', () => {
-  console.log('Socket disconnected');
-})
 
 // Middlewares
 app.use(bodyParser.json());
