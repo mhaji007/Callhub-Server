@@ -53,6 +53,18 @@ class Callhub {
       },
       message
     );
+    // twiml.enqueue
+    // As soon as greeting message is offered
+    // redirect to the enqueue endpoint where
+    // enqueueCall is invoked
+    twiml.redirect("https://mehdi-callhub.loca.lt/enqueue")
+    return twiml;
+  }
+// Function to enqueue call
+// called by the server
+  enqueueCall(queueName) {
+    const twiml = new VoiceResponse();
+    twiml.enqueue(queueName);
     return twiml;
   }
 }

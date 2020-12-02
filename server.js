@@ -3,7 +3,7 @@ const callhub = require("./Callhub");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require("http");
-const jwt = require('./utils/Jwt');
+const jwt = require("./utils/Jwt");
 
 require("dotenv").config();
 // Use socket io for emitting event
@@ -34,6 +34,7 @@ io.on("connection", (socket) => {
 
 // Middlewares
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // // Test endpoint
@@ -47,7 +48,7 @@ app.post("/login", async (req, res) => {
   const { to, username, channel } = req.body;
   // Send verification code to MOBILE number
   const data = await callhub.sendVerify(to, channel);
-  res.send('Sent Code');
+  res.send("Sent Code");
 });
 // Endpoint for verifying the verification code sent
 // back from the frontend
@@ -56,11 +57,11 @@ app.post("/login", async (req, res) => {
 app.post("/verify", async (req, res) => {
   const { to, code, username } = req.body;
   const data = await callhub.verifyCode(to, code);
-    if(data.status === 'approved') {
-      const token = jwt.createJwt(username);
-      return res.send({token})
-    }
-  res.status(401).send('Invalid token');
+  if (data.status === "approved") {
+    const token = jwt.createJwt(username);
+    return res.send({ token });
+  }
+  res.status(401).send("Invalid token");
 });
 
 // Endpoint for handling Twilio webhook call
@@ -68,23 +69,26 @@ app.post("/verify", async (req, res) => {
 // receives calls emits a new event and sends
 // back the body as a response to the frontend
 app.post("/call-new", (req, res) => {
-  console.log('Receive a new call', req.body);
-  io.emit('call-new', {data:req.body})
-  const response = callhub.voiceResponse("Thank you for calling");
-  res.type('text/xml')
+  console.log("Receive a new call", req.body);
+  io.emit("call-new", { data: req.body });
+  const response = callhub.voiceResponse("Thank you for your call");
+  res.type("text/xml");
   res.send(response.toString());
-})
+});
 
 // Endpoint for handling Twilio webhook call
 app.post("/call-status-changed", (req, res) => {
-  console.log('Call status changed');
-  res.send("ok")
-})
+  console.log("Call status changed", req.body);
+  res.send("ok");
+});
 
-
-
-
-
+// Endpoint for enqueuing calls
+app.post("/enqueue", (req, res) => {
+  console.log("Call enqueued");
+  const response = callhub.enqueueCall('Customer Service');
+  res.type("text/xml");
+  res.send(response.toString());
+});
 
 const port = process.env.PORT || 3002;
 
