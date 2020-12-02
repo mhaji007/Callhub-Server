@@ -63,17 +63,26 @@ app.post("/verify", async (req, res) => {
   res.status(401).send('Invalid token');
 });
 
+// Endpoint for handling Twilio webhook call
+// call-new sends back a voice response
+// receives calls emits a new event and sends
+// back the body as a response to the frontend
 app.post("/call-new", (req, res) => {
-  console.log('Receive a new call');
+  console.log('Receive a new call', req.body);
+  io.emit('call-new', {data:req.body})
   const response = callhub.voiceResponse("Thank you for calling");
   res.type('text/xml')
   res.send(response.toString());
 })
 
+// Endpoint for handling Twilio webhook call
 app.post("/call-status-changed", (req, res) => {
   console.log('Call status changed');
   res.send("ok")
 })
+
+
+
 
 
 
