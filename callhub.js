@@ -28,7 +28,7 @@ class Callhub {
         to,
         channel,
       });
-    console.log("sendVerify");
+    console.log("sendVerify", data);
     return data;
   }
   // Function for verifying the verification code
@@ -39,7 +39,7 @@ class Callhub {
         to,
         code,
       });
-    console.log("verifyCode");
+    console.log("verifyCode", data);
     return data;
   }
 }

@@ -1,3 +1,4 @@
+
 // Responsible for creating a token
 // after user is verified by Callhub
 // we want to create a token for the user
@@ -6,6 +7,7 @@
 // When user has signed up with Callhub,
 // we create jwt and
 
+// jsonwebtoken is used to validate/decode jwts on express.js requests.
 const jwt = require("jsonwebtoken")
 
 // we need a secret to sign the certificate with
@@ -16,7 +18,7 @@ function createJwt(username) {
   const token = jwt.sign({username}, secret);
   return token;
 }
-// Verify jwt and retun the username
+// Verify jwt and return the username
 function verifyToken(token){
   const data=jwt.verify(token, secret);
   return data;

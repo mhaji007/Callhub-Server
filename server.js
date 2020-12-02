@@ -3,6 +3,8 @@ const callhub = require("./Callhub");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require("http");
+const jwt = require('./utils/Jwt');
+
 require("dotenv").config();
 // Use socket io for emitting event
 // from client to server without
@@ -35,9 +37,9 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // // Test endpoint
-// app.get("/test", (req, res) => {
-//   res.send("Welcome to Callhub");
-// });
+app.get("/test", (req, res) => {
+  res.send("Welcome to Callhub");
+});
 
 // Endpoint for sending verification code
 // (returns an object containing verification code)
@@ -60,6 +62,18 @@ app.post("/verify", async (req, res) => {
     }
   res.status(401).send('Invalid token');
 });
+
+app.post("/call-new", (req, res) => {
+  console.log('Receive a new call');
+  res.send("ok")
+})
+
+app.post("/call-status-changed", (req, res) => {
+  console.log('Call status changed');
+  res.send("ok")
+})
+
+
 
 const port = process.env.PORT || 3002;
 
