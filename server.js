@@ -65,7 +65,9 @@ app.post("/verify", async (req, res) => {
 
 app.post("/call-new", (req, res) => {
   console.log('Receive a new call');
-  res.send("ok")
+  const response = callhub.voiceResponse("Thank you for calling");
+  res.type('text/xml')
+  res.send(response.toString());
 })
 
 app.post("/call-status-changed", (req, res) => {

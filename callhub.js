@@ -1,4 +1,5 @@
 const twilio = require("twilio");
+const VoiceResponse = require('twilio/lib/twiml/VoiceResponse');
 
 require("dotenv").config();
 
@@ -41,6 +42,18 @@ class Callhub {
       });
     console.log("verifyCode", data);
     return data;
+  }
+
+  voiceResponse(message) {
+    const twiml = new VoiceResponse();
+    twiml.say(
+      {
+        voice: "Poly.Bianca",
+        loop: 2,
+      },
+      message
+    );
+    return twiml;
   }
 }
 
