@@ -86,6 +86,7 @@ app.post("/call-status-changed", (req, res) => {
 app.post("/enqueue", (req, res) => {
   console.log("Call enqueued");
   const response = callhub.enqueueCall('Customer Service');
+  io.emit("enqueue", { data: req.body });
   res.type("text/xml");
   res.send(response.toString());
 });
