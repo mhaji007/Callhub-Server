@@ -69,16 +69,16 @@ app.post("/verify", async (req, res) => {
 // receives calls emits a new event and sends
 // back the body as a response to the frontend
 app.post("/call-new", (req, res) => {
-  console.log("Receive a new call", req.body);
+  console.log("Receive a new call");
   io.emit("call-new", { data: req.body });
-  const response = callhub.voiceResponse("Thank you for your call");
+  const response = callhub.voiceResponse("Thank you for your call. Please hold until next attendant is available.");
   res.type("text/xml");
   res.send(response.toString());
 });
 
 // Endpoint for handling Twilio webhook call
 app.post("/call-status-changed", (req, res) => {
-  console.log("Call status changed", req.body);
+  console.log("Call status changed");
   res.send("ok");
 });
 

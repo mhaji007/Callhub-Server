@@ -48,8 +48,8 @@ class Callhub {
     const twiml = new VoiceResponse();
     twiml.say(
       {
-        voice: "Poly.Bianca",
-        loop: 2,
+        voice: "man",
+        // loop: 2,
       },
       message
     );
