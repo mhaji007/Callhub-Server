@@ -91,6 +91,19 @@ app.post("/enqueue", (req, res) => {
   res.send(response.toString());
 });
 
+
+// Endpoint for validating jwt token
+app.post("/check-token", (req, res) => {
+  const {token} = req.body;
+  let isValid=false;
+  try {
+    isValid = jwt.verifyToken(token)
+  } catch(error) {
+    console.log(error)
+  }
+res.send({isValid});
+})
+
 const port = process.env.PORT || 3002;
 
 // When using sockets server now takes over
