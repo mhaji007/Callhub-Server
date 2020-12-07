@@ -17,6 +17,20 @@ const server = http.createServer(app);
 // Socket
 const io = socketIo(server);
 
+io.use((socket, next) => {
+  console.log("Socket middleware");
+  if (socket.handshake.query && socket.handshake.query.token) {
+    const { token } = socket.handshake.query;
+    try {
+      const result = jwt.verifyToken(token);
+      if (result.username) return next();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+
+
 // Subscribe to events on socket
 // socket below is an individual connection
 // that we get back when connection is established
