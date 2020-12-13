@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require("http");
 const jwt = require("./utils/Jwt");
+const { getAccessTokenForVoice } = require("./Callhub");
+const { Twilio } = require("twilio");
 
 require("dotenv").config();
 // Use socket io for emitting event
@@ -40,6 +42,7 @@ io.use((socket, next) => {
 io.on("connection", (socket) => {
   // When specific page is connected
   console.log("Socket connected", socket.id);
+  socket.emit("twilio-token", { token: getAccessTokenForVoice("mehdi") });
   // On disconnet from any page
   socket.on("disconnect", () => {
     console.log("Socket disconnected", socket.id);
