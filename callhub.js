@@ -10,7 +10,7 @@ class Callhub {
   tokenSecret = process.env.TOKEN_SECRET;
   accountSid = process.env.ACCOUNT_SID;
   serviceId = process.env.SERVICE_SID;
-  outgoingAppSid = process.env.OUTGOING_APP_SID;
+  outgoingApplicationSid = process.env.OUTGOING_APP_SID;
 
   client;
 
@@ -68,7 +68,33 @@ class Callhub {
     twiml.enqueue(queueName);
     return twiml;
   }
+
+    // identity is the person being granted access
+    getAccessTokenForVoice = (identity) => {
+    console.log(`Access token for ${identity}`);
+    const AccessToken = twilio.jwt.AccessToken;
+    const VoiceGrant = AccessToken.VoiceGrant;
+    const outgoingAppSid = this.outgoingApplicationSid;
+    // instance of voice grant
+    const voiceGrant = new VoiceGrant({
+      outgoingApplicationSid: outgoingAppSid,
+      incomingAllow: true,
+    });
+    const token = new AccessToken(
+      this.accountSid,
+      this.tokenSid,
+      this.tokenSecret,
+      { identity }
+    );
+    token.addGrant(voiceGrant);
+    console.log('Access granted with JWT', token.toJwt());
+    return token.toJwt();
+  };
+
+
 }
+
+
 
 const instance = new Callhub();
 Object.freeze(instance);
