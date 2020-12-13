@@ -10,6 +10,7 @@ class Callhub {
   tokenSecret = process.env.TOKEN_SECRET;
   accountSid = process.env.ACCOUNT_SID;
   serviceId = process.env.SERVICE_SID;
+  outgoingAppSid = process.env.OUTGOING_APP_SID;
 
   client;
 
@@ -57,11 +58,11 @@ class Callhub {
     // As soon as greeting message is offered
     // redirect to the enqueue endpoint where
     // enqueueCall is invoked
-    twiml.redirect("https://mehdi-callhub.loca.lt/enqueue")
+    twiml.redirect("https://mehdi-callhub.loca.lt/enqueue");
     return twiml;
   }
-// Function to enqueue call
-// called by the server
+  // Function to enqueue call
+  // called by the server
   enqueueCall(queueName) {
     const twiml = new VoiceResponse();
     twiml.enqueue(queueName);
